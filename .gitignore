@@ -1,2 +1,3 @@
 .DS_Store
-host-ip
+.vagrant/
+/ubuntu/host-ip
