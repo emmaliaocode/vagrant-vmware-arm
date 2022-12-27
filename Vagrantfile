@@ -1,9 +1,8 @@
 # -*- mode: ruby -*-
 # vi:set ft=ruby sw=2 ts=2 sts=2:
 
-# Define the number of master and worker nodes
-NUM_MASTER_NODE = 1
-NUM_WORKER_NODE = 2
+# Define the number of nodes
+NUM_NODE = 2
 
 # All Vagrant configuration is done below. The "2" in Vagrant.configure
 # configures the configuration version (we support older styles for
@@ -70,43 +69,20 @@ Vagrant.configure("2") do |config|
   #   apt-get install -y apache2
   # SHELL
 
-  # Provision Master Nodes
-  (1..NUM_MASTER_NODE).each do |i|
-    config.vm.define "kubemaster" do |node|
+  (1..NUM_NODE).each do |i|
+    config.vm.define "node0#{i}" do |node|
       node.vm.provider "vmware_desktop" do |vmware|
         vmware.cpus = 2
         vmware.memory = 2048
         vmware.gui = true
         vmware.vmx["ethernet0.virtualdev"] = "vmxnet3"
       end
-      node.vm.hostname = "kubemaster"
-      node.vm.network "forwarded_port", guest: 22, host: "#{2710 + i}"
-
-      node.vm.provision "setup-hosts", :type => "shell", :path => "ubuntu/vagrant/setup-hosts.sh" do |s|
-        s.args = ["eth0"]
-      end
-
-      node.vm.provision "setup-dns", type: "shell", :path => "ubuntu/vagrant/update-dns.sh"
-    end
-  end
-
-  # Provision Worker Nodes
-  (1..NUM_WORKER_NODE).each do |i|
-    config.vm.define "kubenode0#{i}" do |node|
-      node.vm.provider "vmware_desktop" do |vmware|
-        vmware.cpus = 2
-        vmware.memory = 2048
-        vmware.gui = true
-        vmware.vmx["ethernet0.virtualdev"] = "vmxnet3"
-      end
-      node.vm.hostname = "kubenode0#{i}"
+      node.vm.hostname = "node0#{i}"
       node.vm.network "forwarded_port", guest: 22, host: "#{2720 + i}"
 
-      node.vm.provision "setup-hosts", :type => "shell", :path => "ubuntu/vagrant/setup-hosts.sh" do |s|
+      node.vm.provision "setup-hosts", :type => "shell", :path => "scripts/setup-hosts.sh" do |s|
         s.args = ["eth0"]
       end
-
-      node.vm.provision "setup-dns", type: "shell", :path => "ubuntu/vagrant/update-dns.sh"
     end
   end
 end
