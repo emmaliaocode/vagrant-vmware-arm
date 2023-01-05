@@ -2,7 +2,7 @@
 # vi:set ft=ruby sw=2 ts=2 sts=2:
 
 # Define the number of nodes
-NUM_NODE = 2
+NUM_NODE = 1
 
 # All Vagrant configuration is done below. The "2" in Vagrant.configure
 # configures the configuration version (we support older styles for
@@ -70,14 +70,14 @@ Vagrant.configure("2") do |config|
   # SHELL
 
   (1..NUM_NODE).each do |i|
-    config.vm.define "node0#{i}" do |node|
+    config.vm.define "vm0#{i}" do |node|
       node.vm.provider "vmware_desktop" do |vmware|
         vmware.cpus = 2
         vmware.memory = 2048
         vmware.gui = true
         vmware.vmx["ethernet0.virtualdev"] = "vmxnet3"
       end
-      node.vm.hostname = "node0#{i}"
+      node.vm.hostname = "vm0#{i}"
       node.vm.network "forwarded_port", guest: 22, host: "#{2720 + i}"
 
       node.vm.provision "setup-hosts", :type => "shell", :path => "scripts/setup-hosts.sh" do |s|
