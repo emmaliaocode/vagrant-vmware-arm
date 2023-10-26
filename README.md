@@ -17,7 +17,7 @@ Since VMware Fusion only supports running ARM on ARM, the Vagrant Box used in th
 1 directory, 4 files
 ```
 ### Usage
-Provision VM(s).
+Provision VMs.
 ```
 cd vagrant-vmware-arm
 vagrant status
@@ -30,4 +30,22 @@ vagrant ssh [hostname]
 Suspend the VMs.
 ```
 vagrant suspend
+```
+### Troubleshooting
+#### Unexpected communications error
+If you encountered the following error when running the vagrant commands.
+```
+Vagrant encountered an unexpected communications error with the
+Vagrant VMware Utility driver. Please try to run the command
+again. If this error persists, please open a new issue at:
+
+  https://github.com/hashicorp/vagrant-vmware-desktop/issues
+```
+Try to upgrade Vagrant and the Vagrant Utility to the latest version.
+```
+# upgrade vagrant
+brew update && brew upgrade hashicorp-vagrant
+
+# upgrade vagrant utility
+brew update && brew upgrade vagrant-vmware-utility
 ```
